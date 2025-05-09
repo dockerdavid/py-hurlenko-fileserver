@@ -4,7 +4,17 @@ from dataclasses import dataclass
 
 @dataclass
 class Upload:
+    """Upload class for Hurlenko file server.
+    Attributes:
+        base_url (str): Base URL of the file server.
+        url (str): URL of the file server locally with the port.
+        token (str): Authentication token.
+        folder (str): Folder where the file will be uploaded.
+        filename (str): Name of the file to be uploaded.
+        shared_url (str): Shared URL Path for accessing the file.
+    """
     base_url: str
+    url: str
     token: str
     folder: str
     filename: str
@@ -12,7 +22,7 @@ class Upload:
 
 
 async def delete_file(upload: Upload) -> None:
-    url = f"{upload.base_url}/resources/{upload.folder}/{upload.filename}"
+    url = f"{upload.url}/resources/{upload.folder}/{upload.filename}"
     headers = {"X-Auth": upload.token}
 
     async with aiohttp.ClientSession() as session:
@@ -22,7 +32,7 @@ async def delete_file(upload: Upload) -> None:
 
 
 async def create_empty_file(upload: Upload) -> str:
-    url = f"{upload.base_url}/tus/{upload.folder}/{upload.filename}?override=false"
+    url = f"{upload.url}/tus/{upload.folder}/{upload.filename}?override=false"
     headers = {"X-Auth": upload.token}
 
     async with aiohttp.ClientSession() as session:
@@ -35,7 +45,7 @@ async def create_empty_file(upload: Upload) -> str:
 
 
 async def fill_empty_file(upload: Upload, file_bytes: bytes, override: bool = False) -> None:
-    url = f"{upload.base_url}/tus/{upload.folder}/{upload.filename}?override={str(override).lower()}"
+    url = f"{upload.url}/tus/{upload.folder}/{upload.filename}?override={str(override).lower()}"
 
     headers = {
         "X-Auth": upload.token,

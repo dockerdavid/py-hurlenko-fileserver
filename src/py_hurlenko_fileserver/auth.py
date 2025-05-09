@@ -4,14 +4,14 @@ from dataclasses import dataclass
 
 @dataclass
 class Credentials:
-    base_url: str
+    url: str
     username: str
     password: str
     recaptcha: str
 
 
 async def auth(credentials: Credentials) -> str:
-    url = f"{credentials.base_url}/login"
+    url = f"{credentials.url}/login"
     payload = {
         "username": credentials.username,
         "password": credentials.password,
